@@ -1,5 +1,6 @@
 package dbenux.test.a2bands.events;
 
+import android.arch.persistence.room.Room;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;

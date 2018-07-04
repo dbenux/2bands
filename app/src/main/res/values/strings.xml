@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">2Bands</string>
 
+    <string name="title_favorites">Favorite Events</string>
+
     <string name="hint_search">Search&#8230;</string>
+
+    <string name="action_favorites">Favorites</string>
 
     <string name="toast_no_activity">No app found to open this content</string>
 

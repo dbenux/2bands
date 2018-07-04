@@ -1,9 +1,12 @@
 package dbenux.test.a2bands.events;
 
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,15 +14,35 @@ import android.widget.TextView;
 import java.util.List;
 
 import dbenux.test.a2bands.R;
+import dbenux.test.a2bands.TwoBandsApplication;
 import dbenux.test.a2bands.api.Api;
 import dbenux.test.a2bands.events.view.EventListAdapter;
 import dbenux.test.a2bands.model.Event;
+import dbenux.test.a2bands.persistence.Persistence;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EventsActivity extends AbstractEventsActivity
         implements Callback<List<Event>>, TextView.OnEditorActionListener {
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_events, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorites:
+                openFavoritesActivity();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     // region AbstractEventsActivity implementation
 
@@ -48,14 +71,37 @@ public class EventsActivity extends AbstractEventsActivity
                 .enqueue(this);
     }
 
+    private void openFavoritesActivity() {
+        Intent favoritesIntent = new Intent(this, MyEventsActivity.class);
+        startActivity(favoritesIntent);
+    }
+
     // region Callback<List<Event>> implementation
 
     @Override
     public void onResponse(@NonNull Call<List<Event>> call, @NonNull Response<List<Event>> response) {
         if (response.isSuccessful()) {
-            List<Event> result = response.body();
+            final List<Event> result = response.body();
+
             if (result!=null) {
-                setAdapter(new EventListAdapter(result, this));
+                (new Thread() {
+                    @Override
+                    public void run() {
+                        Persistence persistence = TwoBandsApplication.getInstance(EventsActivity.this)
+                                .getPersistence();
+
+                        for (Event event: result) {
+                            persistence.artistDao().insert(event.getPrimaryArtist());
+                            persistence.venueDao().insert(event.getVenue());
+                        }
+
+                        persistence.eventDao()
+                                .insertAll(result.toArray(new Event[0]));
+
+                    }
+                }).start();
+
+                setAdapter(new EventListAdapter(result, EventsActivity.this));
             }
 
         } else {
