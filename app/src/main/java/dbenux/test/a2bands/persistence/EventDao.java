@@ -25,6 +25,12 @@ public interface EventDao {
             + "WHERE event.favorited == 1")
     List<Event> getFavorited();
 
+    @Query("SELECT * FROM event "
+            + "INNER JOIN artist ON event.artist_id = artist.id "
+            + "INNER JOIN venue ON venue.latitude = event.venue_latitude AND venue.longitude = event.venue_longitude "
+            + "WHERE event.id == :id")
+    Event getById(long id);
+
     @Query("SELECT favorited FROM event WHERE id = :id")
     boolean isFavorited(long id);
 

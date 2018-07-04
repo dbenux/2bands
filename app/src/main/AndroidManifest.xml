@@ -3,6 +3,7 @@
     package="dbenux.test.a2bands">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".TwoBandsApplication"
@@ -25,6 +26,20 @@
         <activity android:name=".events.MyEventsActivity"
             android:label="@string/title_favorites"
             android:parentActivityName=".events.EventsActivity" />
+
+        <receiver android:name=".reminders.ReminderReceiver"
+            android:exported="false" />
+        <receiver android:name=".reminders.OnBootReceiver"
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+
+        </receiver>
+        <service
+            android:name=".reminders.ReminderJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
     </application>
 

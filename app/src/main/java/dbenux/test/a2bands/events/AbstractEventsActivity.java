@@ -17,6 +17,7 @@ import dbenux.test.a2bands.R;
 import dbenux.test.a2bands.TwoBandsApplication;
 import dbenux.test.a2bands.events.view.EventListAdapter;
 import dbenux.test.a2bands.model.Event;
+import dbenux.test.a2bands.reminders.RescheduleManager;
 
 abstract class AbstractEventsActivity extends AppCompatActivity
         implements OnCellClickListener {
@@ -77,6 +78,13 @@ abstract class AbstractEventsActivity extends AppCompatActivity
     public void onFavoriteCheckedChange(int position, boolean isFavorite) {
         final Event event = getAdapter().getItem(position);
         event.setFavorited(isFavorite);
+
+        if (isFavorite) {
+            RescheduleManager.scheduleReminder(this, event);
+
+        } else {
+            RescheduleManager.removeReminder(this, event);
+        }
 
         (new Thread() {
             @Override

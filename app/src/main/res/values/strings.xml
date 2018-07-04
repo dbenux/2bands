@@ -9,4 +9,8 @@
 
     <string name="toast_no_activity">No app found to open this content</string>
 
+    <string name="notification_channel">Concerts</string>
+    <string name="notification_title">%s concert today!</string>
+    <string name="notification_text">%1$s, at %2$s</string>
+
 </resources>
