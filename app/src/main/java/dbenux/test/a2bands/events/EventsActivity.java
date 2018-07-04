@@ -98,10 +98,18 @@ public class EventsActivity extends AbstractEventsActivity
                         persistence.eventDao()
                                 .insertAll(result.toArray(new Event[0]));
 
+                        for (Event event : result) {
+                            event.setFavorited(persistence.eventDao().isFavorited(event.getId()));
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setAdapter(new EventListAdapter(result, EventsActivity.this));
+                            }
+                        });
                     }
                 }).start();
-
-                setAdapter(new EventListAdapter(result, EventsActivity.this));
             }
 
         } else {

@@ -25,7 +25,10 @@ public interface EventDao {
             + "WHERE event.favorited == 1")
     List<Event> getFavorited();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT favorited FROM event WHERE id = :id")
+    boolean isFavorited(long id);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(Event... events);
 
     @Update

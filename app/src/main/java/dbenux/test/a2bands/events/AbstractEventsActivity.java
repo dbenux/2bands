@@ -1,6 +1,5 @@
 package dbenux.test.a2bands.events;
 
-import android.arch.persistence.room.Room;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +14,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import dbenux.test.a2bands.R;
+import dbenux.test.a2bands.TwoBandsApplication;
 import dbenux.test.a2bands.events.view.EventListAdapter;
 import dbenux.test.a2bands.model.Event;
 
@@ -71,6 +71,22 @@ abstract class AbstractEventsActivity extends AppCompatActivity
                 showErrorMessage(getString(R.string.toast_no_activity));
             }
         }
+    }
+
+    @Override
+    public void onFavoriteCheckedChange(int position, boolean isFavorite) {
+        final Event event = getAdapter().getItem(position);
+        event.setFavorited(isFavorite);
+
+        (new Thread() {
+            @Override
+            public void run() {
+                TwoBandsApplication.getInstance(AbstractEventsActivity.this)
+                        .getPersistence()
+                        .eventDao()
+                        .update(event);
+            }
+        }).start();
     }
 
     // endregion
