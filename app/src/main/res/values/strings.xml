@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">2Bands</string>
+
+    <string name="hint_search">Search&#8230;</string>
+
+    <string name="toast_no_activity">No app found to open this content</string>
+
 </resources>

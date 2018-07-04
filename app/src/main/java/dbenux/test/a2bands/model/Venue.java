@@ -25,4 +25,7 @@ public class Venue {
     @SerializedName("longitude")
     private double longitude;
 
+    public String getName() {
+        return name;
+    }
 }

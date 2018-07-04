@@ -25,4 +25,7 @@ public class Artist {
     @SerializedName("facebook_tour_dates_url")
     private String facebookTourDatesUrl;
 
+    public String getName() {
+        return name;
+    }
 }

@@ -31,4 +31,38 @@ public class Event {
     @SerializedName("venue")
     private Venue venue;
 
+    @SerializedName("ticket_url")
+    private String ticketUrl;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public List<Artist> getArtists() {
+        return artists;
+    }
+    public Artist getPrimaryArtist() {
+        if (artists!=null && artists.size()>0) {
+            return artists.get(0);
+
+        } else {
+            return null;
+        }
+    }
+
+    public String getFormattedLocation() {
+        return formattedLocation;
+    }
+
+    public Venue getVenue() {
+        return venue;
+    }
+
+    public String getTicketUrl() {
+        return ticketUrl;
+    }
 }

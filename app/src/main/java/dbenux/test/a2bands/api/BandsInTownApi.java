@@ -7,9 +7,9 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-interface BandsInTownApi {
+public interface BandsInTownApi {
 
-    String BASE_URL = "http://api.bandsintown.com";
+    String BASE_URL = "https://api.bandsintown.com";
 
     String APP_ID = "2Bands";
 
